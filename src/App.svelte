@@ -183,21 +183,21 @@
 
   async function getScreenshot() {
     if (connected) {
-      let data = await sendCommand('TakeSourceScreenshot', { sourceName: currentScene, embedPictureFormat: 'png', width: 960, height: 540 });
+      let data = await sendCommand('TakeSourceScreenshot', { sourceName: currentScene, embedPictureFormat: 'jpeg', compressionQuality: 20, width: 1280, height: 720 });
       if (data && data.img) {
         document.querySelector('#program').src = data.img;
         document.querySelector('#program').className = '';
       }
 
       if (isStudioMode) {
-        let data = await sendCommand('TakeSourceScreenshot', { sourceName: currentPreviewScene, embedPictureFormat: 'png', width: 960, height: 540 });
+        let data = await sendCommand('TakeSourceScreenshot', { sourceName: currentPreviewScene, embedPictureFormat: 'jpeg', compressionQuality: 20, width: 1280, height: 720 });
         if (data && data.img) {
           document.querySelector('#preview').src = data.img;
           document.querySelector('#preview').classList.remove('is-hidden');
         }
       }
     }
-    setTimeout(getScreenshot, 1000);
+    setTimeout(getScreenshot, 3000);
   }
 
   async function connect() {
@@ -411,7 +411,7 @@
 <section class="section">
   <div class="container">
     {#if connected}
-      {#if isSceneOnTop}
+      {#if !isSceneOnTop}
         <SceneView isStudioMode={isStudioMode} transitionScene={transitionScene}/>
       {/if}
       {#each sceneChunks as chunk}
@@ -436,7 +436,7 @@
           {/each}
         </div>
       {/each}
-      {#if !isSceneOnTop}
+      {#if isSceneOnTop}
         <SceneView isStudioMode={isStudioMode} transitionScene={transitionScene}/>
       {/if}
     {:else}
